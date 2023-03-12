@@ -1,1 +1,1 @@
-web: bash bin/start.sh
+web: python src/serve.py
