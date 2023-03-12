@@ -1,9 +1,9 @@
 import logging
 import uvicorn
+from os import environ
 
 logger = logging.getLogger(__name__)
-
-PORT = 80
+PORT = int(environ.get("PORT", '8000'))
 
 
 def serve():
