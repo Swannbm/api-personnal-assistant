@@ -1,7 +1,7 @@
 import logging
 from typing import Dict
 
-from fastapi import FastAPI, Query, Body
+from fastapi import FastAPI, Query, Body, HTTPException
 
 from .config import VERIFY_TOKEN
 
@@ -30,7 +30,7 @@ async def subscribe(
     if mode == "subscribe" and challenge and verify_token == VERIFY_TOKEN:
         logger.info("Subscribe mode")
         return int(challenge)
-    return data
+    raise HTTPException(status_code=404, detail="Check parameters and verify token")
 
 
 @app.post("/webhook")
