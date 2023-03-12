@@ -1,6 +1,7 @@
 import logging
+from typing import Dict
 
-from fastapi import FastAPI, Query
+from fastapi import FastAPI, Query, Body
 
 from .config import VERIFY_TOKEN
 
@@ -33,5 +34,6 @@ async def subscribe(
 
 
 @app.post("/webhook")
-async def webhook():
-    logger.info("Route=POST /webhook")
+async def webhook(payload: Dict = Body()):
+    logger.info("Route=POST /webhook with payload=%s", payload)
+    return {"payload": payload}
