@@ -14,13 +14,19 @@ async def read_root():
 
 
 @app.get("/webhook")
-async def webhook(**kwargs):
+async def webhook(
+    hub_mode: str | None = None,
+    hub_challenge: str | None = None,
+    hub_verify_token: str | None = None,
+):
     logger.info("Route=webhook with kwargs=%s", kwargs)
-    mode = kwargs.get("hub.mode")
-    if mode == "subscribe":
-        challenge = kwargs.get("hub.challenge")
-        return challenge
-    return kwargs
+    if hub_mode == "subscribe":
+        return hub_challenge
+    return {
+        "hub_mode": hub_mode,
+        "hub_challenge": hub_challenge,
+        "hub_verify_token": hub_verify_token,
+    }
 
 
 @app.get("/items/{item_id}")
