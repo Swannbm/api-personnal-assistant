@@ -25,7 +25,7 @@ async def webhook(
         "hub.verify_token": verify_token,
     }
     logger.info("Route=webhook with kwargs=%s", data)
-    if mode == "subscribe":
+    if mode == "subscribe" and challenge is not None:
         logger.info("Subscribe mode")
-        return challenge
+        return int(challenge)
     return data
