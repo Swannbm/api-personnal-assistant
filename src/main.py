@@ -1,7 +1,9 @@
+import logging
 from typing import Union
 
 from fastapi import FastAPI
 
+logger = logging.getLogger(__name__)
 
 app = FastAPI()
 
@@ -13,6 +15,7 @@ async def read_root():
 
 @app.get("/webhook")
 async def webhook(**kwargs):
+    logger.info("Route=webhook with kwargs=%s", kwargs)
     mode = kwargs.get("hub.mode")
     if mode == "subscribe":
         challenge = kwargs.get("hub.challenge")
