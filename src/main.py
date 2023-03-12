@@ -1,7 +1,8 @@
 import logging
-from typing import Union
 
 from fastapi import FastAPI, Query
+
+from .config import VERIFY_TOKEN
 
 logger = logging.getLogger(__name__)
 
@@ -14,18 +15,23 @@ async def read_root():
 
 
 @app.get("/webhook")
-async def webhook(
-    mode: str | None = Query(default=None, alias="hub.mode"),
-    challenge: str | None = Query(default=None, alias="hub.challenge"),
-    verify_token: str | None = Query(default=None, alias="hub.verify_token"),
+async def subscribe(
+    mode: str = Query(alias="hub.mode"),
+    challenge: str = Query(alias="hub.challenge"),
+    verify_token: str = Query(alias="hub.verify_token"),
 ):
     data = {
         "hub.mode": mode,
         "hub.challenge": challenge,
         "hub.verify_token": verify_token,
     }
-    logger.info("Route=webhook with kwargs=%s", data)
-    if mode == "subscribe" and challenge is not None:
+    logger.info("Route=GET /webhook with paremeters=%s", data)
+    if mode == "subscribe" and challenge and verify_token == VERIFY_TOKEN:
         logger.info("Subscribe mode")
         return int(challenge)
     return data
+
+
+@app.post("/webhook")
+async def webhook():
+    logger.info("Route=POST /webhook")

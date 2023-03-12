@@ -1,9 +1,9 @@
 import logging
 import uvicorn
-from os import environ
+
+from .config import PORT
 
 logger = logging.getLogger(__name__)
-PORT = int(environ.get("PORT", '8000'))
 
 
 def serve():
